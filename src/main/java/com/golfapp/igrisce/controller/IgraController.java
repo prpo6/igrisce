@@ -1,7 +1,9 @@
 package com.golfapp.igrisce.controller;
 
+import com.golfapp.igrisce.dto.CreateIgraRequest;
 import com.golfapp.igrisce.dto.IgraDTO;
 import com.golfapp.igrisce.service.IgraService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +17,16 @@ public class IgraController {
 
    private final IgraService igraService;
 
-   @PostMapping(consumes = "application/json", produces = "application/json")
-   public ResponseEntity<IgraDTO> createIgra(@RequestParam UUID rezervacijaId, @RequestParam UUID clanId) {
-      IgraDTO created = igraService.createIgra(rezervacijaId, clanId);
+   @PostMapping
+   public ResponseEntity<IgraDTO> createIgra(@Valid @RequestBody CreateIgraRequest request) {
+      IgraDTO created = igraService.createIgra(request.getRezervacijaId(), request.getClanId());
       return ResponseEntity.status(HttpStatus.CREATED).body(created);
+   }
+
+   @GetMapping
+   public ResponseEntity<List<IgraDTO>> getAllIgre() {
+      List<IgraDTO> igre = igraService.getAllIgre();
+      return ResponseEntity.ok(igre);
    }
 
    @GetMapping("/{id}")

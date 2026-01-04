@@ -1,18 +1,18 @@
 package com.golfapp.igrisce.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.UUID;
 
 @Data @NoArgsConstructor @AllArgsConstructor
-public class RezervacijaDTO {
-   private UUID id;
+public class CreateIgraRequest {
+
+   @NotNull(message = "Rezervacija ID je obvezen")
+   private UUID rezervacijaId;
+
+   @NotNull(message = "Clan ID je obvezen")
    private UUID clanId;
-   private Integer skupina;
-   private LocalDate datum;
-   private LocalTime ura;
 }

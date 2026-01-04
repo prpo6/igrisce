@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,8 +25,8 @@ public class Rezervacija {
    @Column(name = "datum")
    private LocalDate datum;
 
-   @Column(name = "ura")
-   private LocalDateTime ura;
+   @Column(name = "ura", columnDefinition = "time(0)")
+   private LocalTime ura;
 
    @OneToMany(mappedBy = "rezervacija", cascade = CascadeType.ALL, orphanRemoval = true)
    private List<Igra> igre;

@@ -51,6 +51,12 @@ public class IgraService {
    }
 
    @Transactional(readOnly = true)
+   public List<IgraDTO> getAllIgre() {
+      log.info("Fetching all games");
+      return igraRepository.findAll().stream().map(this::mapToDTO).collect(Collectors.toList());
+   }
+
+   @Transactional(readOnly = true)
    public List<IgraDTO> getIgreByRezervacija(UUID rezervacijaId) {
       log.info("Fetching games for rezervacija: {}", rezervacijaId);
       return igraRepository.findByRezervacijaId(rezervacijaId).stream().map(this::mapToDTO)

@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.UUID;
 
 @Data @NoArgsConstructor @AllArgsConstructor
@@ -21,5 +21,5 @@ public class CreateRezervacijaRequest {
    private LocalDate datum;
 
    @NotNull(message = "Ura je obvezna")
-   private LocalDateTime ura;
+   private LocalTime ura;
 }
