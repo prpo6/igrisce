@@ -16,6 +16,8 @@ public interface RezervacijaRepository extends JpaRepository<Rezervacija, UUID>,
 
    List<Rezervacija> findByClanId(UUID clanId);
 
+   List<Rezervacija> findByClanIdAndDatum(UUID clanId, LocalDate datum);
+
    List<Rezervacija> findByDatumBetween(LocalDate startDate, LocalDate endDate);
 
    List<Rezervacija> findBySkupina(Integer skupina);

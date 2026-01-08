@@ -1,5 +1,6 @@
 package com.golfapp.igrisce.service;
 
+import com.golfapp.igrisce.client.TurnirjiClient;
 import com.golfapp.igrisce.dto.CreateRezervacijaRequest;
 import com.golfapp.igrisce.dto.RezervacijaDTO;
 import com.golfapp.igrisce.exception.ResourceNotFoundException;
@@ -20,10 +21,26 @@ import java.util.stream.Collectors;
 public class RezervacijaService {
 
    private final RezervacijaRepository rezervacijaRepository;
+   private final TurnirjiClient turnirjiClient;
 
    @Transactional
    public RezervacijaDTO createRezervacija(CreateRezervacijaRequest request) {
       log.info("Creating new reservation for clan: {}", request.getClanId());
+
+      // Check if there's a tournament on this date
+      if (turnirjiClient.isTournamentOnDate(request.getDatum())) {
+         log.warn("Cannot create reservation - tournament is scheduled on date: {}", request.getDatum());
+         throw new IllegalStateException("Ne morete ustvariti rezervacije - ta dan je rezerviran za turnir");
+      }
+
+      // Check if user already has a reservation on this date
+      List<Rezervacija> existingRezervacije = rezervacijaRepository.findByClanIdAndDatum(
+         request.getClanId(), request.getDatum());
+      
+      if (!existingRezervacije.isEmpty()) {
+         log.warn("User {} already has a reservation on date: {}", request.getClanId(), request.getDatum());
+         throw new IllegalStateException("Na ta dan že imate rezervacijo. Lahko imate samo eno rezervacijo na dan.");
+      }
 
       Rezervacija rezervacija = new Rezervacija();
       rezervacija.setClanId(request.getClanId());
