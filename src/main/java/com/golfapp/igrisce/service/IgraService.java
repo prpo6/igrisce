@@ -27,8 +27,8 @@ public class IgraService {
    public IgraDTO createIgra(UUID rezervacijaId, UUID clanId) {
       log.info("Creating new game for rezervacija: {} and clan: {}", rezervacijaId, clanId);
 
-      // Verify reservation exists
-      if (!rezervacijaRepository.existsById(rezervacijaId)) {
+      // Verify reservation exists (only if rezervacijaId is provided - tournament games don't need it)
+      if (rezervacijaId != null && !rezervacijaRepository.existsById(rezervacijaId)) {
          throw new ResourceNotFoundException("Rezervacija not found with ID: " + rezervacijaId);
       }
 

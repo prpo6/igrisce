@@ -61,4 +61,11 @@ public class RezervacijaController {
       rezervacijaService.deleteRezervacija(id);
       return ResponseEntity.noContent().build();
    }
+
+   @GetMapping("/past")
+   public ResponseEntity<List<RezervacijaDTO>> getPastRezervacije(
+            @RequestParam(required = false, defaultValue = "50") Integer limit) {
+      List<RezervacijaDTO> pastReservations = rezervacijaService.getPastRezervacije(limit);
+      return ResponseEntity.ok(pastReservations);
+   }
 }
