@@ -43,16 +43,6 @@ public class RezervacijaService {
          throw new IllegalStateException("Na ta dan že imate rezervacijo. Lahko imate samo eno rezervacijo na dan.");
       }
 
-      // Check if the time slot is already taken (regardless of skupina)
-      List<Rezervacija> existingAtTime = rezervacijaRepository.findByDatumAndUra(
-         request.getDatum(), request.getUra());
-      
-      if (!existingAtTime.isEmpty()) {
-         log.warn("Time slot already taken - datum: {}, ura: {}", 
-            request.getDatum(), request.getUra());
-         throw new IllegalStateException("Ta termin je že zaseden. Prosim izberite drug čas.");
-      }
-
       Rezervacija rezervacija = new Rezervacija();
       rezervacija.setClanId(request.getClanId());
       rezervacija.setSkupina(request.getSkupina());
