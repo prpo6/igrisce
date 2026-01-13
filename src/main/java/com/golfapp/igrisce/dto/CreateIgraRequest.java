@@ -10,7 +10,7 @@ import java.util.UUID;
 @Data @NoArgsConstructor @AllArgsConstructor
 public class CreateIgraRequest {
 
-   @NotNull(message = "Rezervacija ID je obvezen")
+   // Optional - can be null for tournament games without reservation
    private UUID rezervacijaId;
 
    @NotNull(message = "Clan ID je obvezen")

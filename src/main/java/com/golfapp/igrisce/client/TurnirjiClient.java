@@ -13,7 +13,7 @@ public class TurnirjiClient {
 
     private final RestTemplate restTemplate;
 
-    @Value("${turnirji.service.url:http://localhost:8083}")
+    @Value("${turnirji.service.url:http://turnirji:8080}")
     private String turnirjiServiceUrl;
 
     public boolean isTournamentOnDate(LocalDate datum) {

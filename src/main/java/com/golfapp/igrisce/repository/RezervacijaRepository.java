@@ -6,7 +6,9 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -21,4 +23,10 @@ public interface RezervacijaRepository extends JpaRepository<Rezervacija, UUID>,
    List<Rezervacija> findByDatumBetween(LocalDate startDate, LocalDate endDate);
 
    List<Rezervacija> findBySkupina(Integer skupina);
+   
+   Optional<Rezervacija> findByDatumAndUraAndSkupina(LocalDate datum, LocalTime ura, Integer skupina);
+   
+   List<Rezervacija> findByDatumAndUra(LocalDate datum, LocalTime ura);
+   
+   List<Rezervacija> findByDatumBeforeOrderByDatumDescUraDesc(LocalDate datum);
 }

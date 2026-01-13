@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -40,6 +41,16 @@ public class RezervacijaService {
       if (!existingRezervacije.isEmpty()) {
          log.warn("User {} already has a reservation on date: {}", request.getClanId(), request.getDatum());
          throw new IllegalStateException("Na ta dan že imate rezervacijo. Lahko imate samo eno rezervacijo na dan.");
+      }
+
+      // Check if the time slot is already taken (regardless of skupina)
+      List<Rezervacija> existingAtTime = rezervacijaRepository.findByDatumAndUra(
+         request.getDatum(), request.getUra());
+      
+      if (!existingAtTime.isEmpty()) {
+         log.warn("Time slot already taken - datum: {}, ura: {}", 
+            request.getDatum(), request.getUra());
+         throw new IllegalStateException("Ta termin je že zaseden. Prosim izberite drug čas.");
       }
 
       Rezervacija rezervacija = new Rezervacija();
@@ -122,6 +133,19 @@ public class RezervacijaService {
 
       rezervacijaRepository.deleteById(id);
       log.info("Reservation deleted with ID: {}", id);
+   }
+
+   @Transactional(readOnly = true)
+   public List<RezervacijaDTO> getPastRezervacije(Integer limit) {
+      log.info("Fetching past reservations with limit: {}", limit);
+      LocalDate today = LocalDate.now();
+      List<Rezervacija> pastReservations = rezervacijaRepository.findByDatumBeforeOrderByDatumDescUraDesc(today);
+      
+      if (limit != null && limit > 0) {
+         pastReservations = pastReservations.stream().limit(limit).collect(Collectors.toList());
+      }
+      
+      return pastReservations.stream().map(this::mapToDTO).collect(Collectors.toList());
    }
 
    private RezervacijaDTO mapToDTO(Rezervacija rezervacija) {
